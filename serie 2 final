@@ -1,0 +1,406 @@
+def max_product_subsequence(nums):
+    if not nums:
+        return 0
+
+    n = len(nums)
+
+    # Inicializar las variables que realizarán un seguimiento del producto máximo y mínimo
+    max_product = min_product = result = nums[0]
+
+    for i in range(1, n):
+        # Si el número actual es negativo, intercambiamos max_product y min_product
+        if nums[i] < 0:
+            max_product, min_product = min_product, max_product
+
+        # Actualizar max_product y min_product
+        max_product = max(nums[i], max_product * nums[i])
+        min_product = min(nums[i], min_product * nums[i])
+
+        # Actualizar el resultado final
+        result = max(result, max_product)
+
+    return result
+
+# Ejemplo de uso
+sequence = [2, 3, -2, 4, -1]
+result = max_product_subsequence(sequence)
+print("El producto máximo de la subsecuencia es:", result)
+
+
+ejercicio 2
+
+def contar_inversiones(arr):
+    n = len(arr)
+    inversiones = 0
+
+    for i in range(n - 1):
+        for j in range(i + 1, n):
+            if arr[i] > arr[j]:
+                inversiones += 1
+
+    return inversiones
+
+# Ejemplo de uso
+arreglo = [5, 2, 3, 1, 4]
+resultado = contar_inversiones(arreglo)
+print("Número de inversiones:", resultado)
+
+
+
+
+
+
+
+ejercicio 3
+
+class EstructuraDatosCuadratico:
+    def __init__(self, arr):
+        n = len(arr)
+        self.matriz_minimos = [[0] * n for _ in range(n)]
+
+        # Construir la matriz de mínimos
+        for i in range(n):
+            self.matriz_minimos[i][i] = arr[i]
+            for j in range(i + 1, n):
+                self.matriz_minimos[i][j] = min(self.matriz_minimos[i][j - 1], arr[j])
+
+    def obtener_minimo(self, i, j):
+        return self.matriz_minimos[i][j]
+
+# Ejemplo de uso
+arr = [5, 2, 8, 9, 1, 6]
+estructura_cuadratica = EstructuraDatosCuadratico(arr)
+resultado = estructura_cuadratica.obtener_minimo(1, 4)
+print("El mínimo en el rango es:", resultado)
+
+
+
+
+
+ejercicio 4
+
+class EstructuraDatosLogaritmico:
+    def __init__(self, arr):
+        n = len(arr)
+        self.bitree = [float('inf')] * (n + 1)
+
+        # Construir el Árbol de Fenwick
+        for i in range(n):
+            self.actualizar(i, arr[i])
+
+    def actualizar(self, i, valor):
+        i += 1
+        while i < len(self.bitree):
+            self.bitree[i] = min(self.bitree[i], valor)
+            i += i & -i
+
+    def obtener_minimo(self, j):
+        j += 1
+        resultado = float('inf')
+        while j > 0:
+            resultado = min(resultado, self.bitree[j])
+            j -= j & -j
+        return resultado
+
+# Ejemplo de uso
+arr = [5, 2, 8, 9, 1, 6]
+estructura_logaritmica = EstructuraDatosLogaritmico(arr)
+resultado = estructura_logaritmica.obtener_minimo(4)
+print("El mínimo en el rango es:", resultado)
+
+
+
+
+
+
+ejercicio 5
+
+import heapq
+
+def merge_sorted_lists(listas):
+    result = []
+    heap = []
+
+    # Inicializar el heap con el primer elemento de cada lista junto con el índice de la lista
+    for i, lista in enumerate(listas):
+        if lista:  # Asegurarse de que la lista no esté vacía
+            heapq.heappush(heap, (lista[0], i, 0))
+
+    while heap:
+        val, lista_idx, elemento_idx = heapq.heappop(heap)
+
+        # Agregar el valor mínimo al resultado
+        result.append(val)
+
+        # Mover al siguiente elemento de la lista actual si hay más elementos
+        if elemento_idx + 1 < len(listas[lista_idx]):
+            heapq.heappush(heap, (listas[lista_idx][elemento_idx + 1], lista_idx, elemento_idx + 1))
+
+    return result
+
+# Ejemplo de uso
+lista1 = [1, 3, 5, 7]
+lista2 = [2, 4, 6, 8]
+lista3 = [0, 9, 10, 11]
+
+listas_ordenadas = [lista1, lista2, lista3]
+
+resultado_final = merge_sorted_lists(listas_ordenadas)
+print("Lista ordenada resultante:", resultado_final)
+
+
+
+
+
+ejercicio 6
+
+def encontrar_pico_desconociendo_n(arr):
+    inicio, fin = 0, len(arr) - 1
+
+    while inicio < fin:
+        medio = (inicio + fin) // 2
+
+        if arr[medio] < arr[medio + 1]:
+            inicio = medio + 1
+        else:
+            fin = medio
+
+    # En este punto, 'inicio' contiene el índice k
+
+    # Ahora, ajustamos los límites para encontrar el valor de n
+    inicio_n, fin_n = inicio, len(arr) - 1
+
+    while inicio_n < fin_n:
+        medio_n = (inicio_n + fin_n) // 2
+
+        if arr[medio_n] < arr[medio_n + 1]:
+            inicio_n = medio_n + 1
+        else:
+            fin_n = medio_n
+
+    # En este punto, 'inicio_n' contiene el valor de n
+
+    return inicio, inicio_n
+
+# Ejemplo de uso
+arreglo_desconocido = [1, 3, 5, 8, 10, 6, 4, 2, 0, -1]
+indice_k, valor_n = encontrar_pico_desconociendo_n(arreglo_desconocido)
+print("El valor de k es:", indice_k)
+print("El valor de n es:", valor_n + 1)  # Sumamos 1 porque 'valor_n' es un índice
+def encontrar_pico_desconociendo_n(arr):
+    inicio, fin = 0, len(arr) - 1
+
+    while inicio < fin:
+        medio = (inicio + fin) // 2
+
+        if arr[medio] < arr[medio + 1]:
+            inicio = medio + 1
+        else:
+            fin = medio
+
+    # En este punto, 'inicio' contiene el índice k
+
+    # Ahora, ajustamos los límites para encontrar el valor de n
+    inicio_n, fin_n = inicio, len(arr) - 1
+
+    while inicio_n < fin_n:
+        medio_n = (inicio_n + fin_n) // 2
+
+        if arr[medio_n] < arr[medio_n + 1]:
+            inicio_n = medio_n + 1
+        else:
+            fin_n = medio_n
+
+    # En este punto, 'inicio_n' contiene el valor de n
+
+    return inicio, inicio_n
+
+# Ejemplo de uso
+arreglo_desconocido = [1, 3, 5, 8, 10, 6, 4, 2, 0, -1]
+indice_k, valor_n = encontrar_pico_desconociendo_n(arreglo_desconocido)
+print("El valor de k es:", indice_k)
+print("El valor de n es:", valor_n + 1)  # Sumamos 1 porque 'valor_n' es un índice
+
+
+
+
+ejercicio 7
+
+def buscar_kesimo_elemento_rotado(arr, k):
+    inicio, fin = 0, len(arr) - 1
+
+    while inicio <= fin:
+        medio = (inicio + fin) // 2
+
+        if arr[medio] == k:
+            return medio
+
+        # Caso 1: El segmento izquierdo es ordenado
+        if arr[inicio] <= arr[medio]:
+            if arr[inicio] <= k <= arr[medio]:
+                fin = medio - 1
+            else:
+                inicio = medio + 1
+        # Caso 2: El segmento derecho es ordenado
+        else:
+            if arr[medio] <= k <= arr[fin]:
+                inicio = medio + 1
+            else:
+                fin = medio - 1
+
+    return -1  # Si no se encuentra el elemento
+
+# Ejemplo de uso
+arreglo_rotado = [15, 16, 19, 20, 25, 1, 3, 4, 5, 7, 10, 14]
+k_elemento = 5
+resultado = buscar_kesimo_elemento_rotado(arreglo_rotado, k_elemento)
+
+if resultado != -1:
+    print(f"El {k_elemento}-ésimo elemento es:", arreglo_rotado[resultado])
+else:
+    print("Elemento no encontrado.")
+def buscar_kesimo_elemento_rotado(arr, k):
+    inicio, fin = 0, len(arr) - 1
+
+    while inicio <= fin:
+        medio = (inicio + fin) // 2
+
+        if arr[medio] == k:
+            return medio
+
+        # Caso 1: El segmento izquierdo es ordenado
+        if arr[inicio] <= arr[medio]:
+            if arr[inicio] <= k <= arr[medio]:
+                fin = medio - 1
+            else:
+                inicio = medio + 1
+        # Caso 2: El segmento derecho es ordenado
+        else:
+            if arr[medio] <= k <= arr[fin]:
+                inicio = medio + 1
+            else:
+                fin = medio - 1
+
+    return -1  # Si no se encuentra el elemento
+
+# Ejemplo de uso
+arreglo_rotado = [15, 16, 19, 20, 25, 1, 3, 4, 5, 7, 10, 14]
+k_elemento = 5
+resultado = buscar_kesimo_elemento_rotado(arreglo_rotado, k_elemento)
+
+if resultado != -1:
+    print(f"El {k_elemento}-ésimo elemento es:", arreglo_rotado[resultado])
+else:
+    print("Elemento no encontrado.")
+
+
+
+
+ejercicio 8
+
+def encontrar_t_y_m(arr):
+    tortuga = arr[0]
+    liebre = arr[0]
+
+    # Fase 1: Detección de ciclo
+    while True:
+        tortuga = arr[tortuga]
+        liebre = arr[arr[liebre]]
+        if tortuga == liebre:
+            break
+
+    # Fase 2: Encontrar el inicio del ciclo
+    tortuga = arr[0]
+    while tortuga != liebre:
+        tortuga = arr[tortuga]
+        liebre = arr[liebre]
+
+    t = tortuga  # El punto de encuentro es el elemento t repetido
+
+    # Fase 3: Encontrar m (elemento que falta)
+    tortuga = arr[0]
+    while tortuga != liebre:
+        tortuga = arr[tortuga]
+        liebre = arr[liebre]
+
+    m = tortuga  # El punto de encuentro es el elemento m que falta
+
+    return t, m
+
+# Ejemplo de uso
+arreglo = [1, 3, 4, 2, 2]
+t, m = encontrar_t_y_m(arreglo)
+print(f"El elemento repetido (t) es: {t}")
+print(f"El elemento que falta (m) es: {m}")
+
+
+
+
+ejercicio 9
+
+def josephus_permutation(n, m):
+    # Inicializar una lista con las etiquetas de las personas
+    personas = list(range(1, n + 1))
+    resultado = []
+
+    # Índice inicial
+    indice = 0
+
+    for _ in range(n):
+        # Avanzar al siguiente elemento según el valor de m
+        indice = (indice + m - 1) % len(personas)
+
+        # Agregar el elemento al resultado y eliminarlo de la lista
+        resultado.append(personas.pop(indice))
+
+    return resultado
+
+# Ejemplo de uso
+n = 7
+m = 3
+permutacion_josephus = josephus_permutation(n, m)
+print(f"La ({n}, {m})-permutación de Josephus es: {permutacion_josephus}")
+
+
+
+
+ejercicio 10
+
+class FenwickTree:
+    def __init__(self, n):
+        self.n = n
+        self.bit_tree = [0] * (n + 1)
+
+    def update(self, i, delta):
+        # Incrementar el valor en la posición i por delta
+        while i <= self.n:
+            self.bit_tree[i] += delta
+            i += i & -i
+
+    def partial_sum(self, i):
+        # Calcular la suma acumulativa hasta la posición i
+        result = 0
+        while i > 0:
+            result += self.bit_tree[i]
+            i -= i & -i
+        return result
+
+# Operación Add(i, y): A[i] += y
+def add_operation(bit_tree, i, y):
+    bit_tree.update(i + 1, y)  # Sumar y a la posición i+1
+
+# Operación Partial-sum(i): Retorna la suma de los primeros i números A[1] + ... + A[i]
+def partial_sum_operation(bit_tree, i):
+    return bit_tree.partial_sum(i + 1)  # Calcular la suma acumulativa hasta la posición i+1
+
+# Ejemplo de uso
+n = 10
+arr = [0] * n  # Arreglo inicializado con ceros
+bit_tree = FenwickTree(n)
+
+add_operation(bit_tree, 2, 5)
+add_operation(bit_tree, 5, 3)
+add_operation(bit_tree, 7, 2)
+
+result = partial_sum_operation(bit_tree, 5)
+print("La suma de los primeros 5 elementos es:", result)
